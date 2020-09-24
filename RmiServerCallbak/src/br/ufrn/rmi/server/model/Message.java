@@ -1,4 +1,4 @@
-package br.ufrn.rmi.model;
+package br.ufrn.rmi.server.model;
 
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
@@ -10,6 +10,7 @@ public class Message implements Serializable{
 	private String date;
     private SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");  
 
+	
 	public Message(String message) {
 		this.message = message;
 		this.date = formatter.format(new Date());
@@ -33,5 +34,4 @@ public class Message implements Serializable{
 		return "Message [message=" + message + ", date=" + date + "]";
 	}
 	
-
 }

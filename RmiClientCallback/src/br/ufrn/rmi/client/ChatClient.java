@@ -1,4 +1,4 @@
-package br.ufrn.rmi_hello;
+package br.ufrn.rmi.client;
 
 import java.net.MalformedURLException;
 import java.rmi.Naming;
@@ -9,12 +9,12 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Scanner;
 
-import br.ufrn.rmi.model.Message;
+import br.ufrn.rmi.client.model.Message;
 
 
-public class HelloClient extends UnicastRemoteObject implements HelloClientInterface {
+public class ChatClient extends UnicastRemoteObject implements ChatClientInterface {
 
-	protected HelloClient() throws RemoteException {
+	protected ChatClient() throws RemoteException {
 		super();
 		// TODO Auto-generated constructor stub
 		new Notify().start();
@@ -36,8 +36,8 @@ public class HelloClient extends UnicastRemoteObject implements HelloClientInter
 					
 				try {
 
-					HelloServerInterface server = (HelloServerInterface) 
-							Naming.lookup("rmi://127.0.0.1:1098/HelloServerCallbak");
+					ChatServerInterface server = (ChatServerInterface)
+							Naming.lookup("rmi://127.0.0.1:1098/ChatServer");
 
 					
 					Scanner scanner = new Scanner(System.in);
@@ -48,11 +48,14 @@ public class HelloClient extends UnicastRemoteObject implements HelloClientInter
 					
 					
 				} catch (RemoteException e) {
-					System.out.println("Não foi possível enviar sua mensagem.");
+					System.out.println("a");
+					System.out.println("Nï¿½o foi possï¿½vel enviar sua mensagem.");
 				} catch (MalformedURLException e) {
-					System.out.println("Não foi possível enviar sua mensagem.");
+					System.out.println("b");
+					System.out.println("Nï¿½o foi possï¿½vel enviar sua mensagem.");
 				} catch (NotBoundException e) {
-					System.out.println("Não foi possível enviar sua mensagem.");
+					System.out.println("c");
+					System.out.println("Nï¿½o foi possï¿½vel enviar sua mensagem.");
 				}
 				
 				

@@ -1,4 +1,6 @@
-package br.ufrn.rmi_hello;
+package br.ufrn.server;
+
+import br.ufrn.rmi.client.ChatServerInterface;
 
 import java.net.MalformedURLException;
 import java.rmi.Naming;
@@ -11,13 +13,13 @@ public class Main {
 		
 		System.setProperty("java.rmi.server.hostname","127.0.0.1");
 		
-		HelloServerInterface server = new HelloServer();
+		ChatServerInterface server = new ChatServer();
 
 		LocateRegistry.createRegistry(1098);
 		
-		Naming.rebind("rmi://127.0.0.1:1098/HelloServerCallbak", server);
+		Naming.rebind("rmi://127.0.0.1:1098/ChatServer", server);
 		
-		System.out.println("RMI Callback Server Starterd.");
+		System.out.println("RMI Callback Server Started.");
 		
 	}
 

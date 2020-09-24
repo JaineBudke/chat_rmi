@@ -1,13 +1,12 @@
-package br.ufrn.rmi_hello;
+package br.ufrn.server;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 
-import br.ufrn.rmi.model.Message;
+import br.ufrn.rmi.client.model.Message;
 
-public interface HelloClientInterface extends Remote {
+public interface ChatClientInterface extends Remote {
 	
 	public void printMessage(Message message) throws RemoteException;
 
-	
 }

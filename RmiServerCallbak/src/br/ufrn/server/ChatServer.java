@@ -1,24 +1,26 @@
-package br.ufrn.rmi_hello;
+package br.ufrn.server;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.ufrn.rmi.model.Message;
+import br.ufrn.rmi.client.model.Message;
+import br.ufrn.rmi.client.ChatClientInterface;
+import br.ufrn.rmi.client.ChatServerInterface;
 
-public class HelloServer extends UnicastRemoteObject implements HelloServerInterface {
+public class ChatServer extends UnicastRemoteObject implements ChatServerInterface {
 
-	private volatile List<HelloClientInterface> clients = new ArrayList<HelloClientInterface>();
+	private volatile List<ChatClientInterface> clients = new ArrayList<ChatClientInterface>();
 	
-	protected HelloServer() throws RemoteException {
+	protected ChatServer() throws RemoteException {
 		super();	
 		
 		new Notify().start();
 	}
 
 	@Override
-	public void registerClient(HelloClientInterface client) throws RemoteException {
+	public void registerClient(ChatClientInterface client) throws RemoteException {
 			
 		clients.add(client);
 		System.out.println("Novo cliente registrado com sucesso! Total: "+clients.size());
@@ -36,7 +38,8 @@ public class HelloServer extends UnicastRemoteObject implements HelloServerInter
 					System.out.println("Notificando clientes");
 					
 					int i = 0;
-					for (HelloClientInterface helloClientInterface : clients) {
+					// todo: retirar o cliente quando ele desconecta (n sei se aq ou no client)
+					for (ChatClientInterface helloClientInterface : clients) {
 						
 						try {
 							helloClientInterface.printMessage(new Message("Hello client " + (i++)));

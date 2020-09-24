@@ -1,4 +1,4 @@
-package br.ufrn.rmi_hello;
+package br.ufrn.rmi.client;
 
 import java.net.MalformedURLException;
 import java.rmi.Naming;
@@ -9,10 +9,10 @@ public class Main {
 
 	public static void main(String[] args) throws MalformedURLException, RemoteException, NotBoundException {
 		
-		HelloServerInterface server = (HelloServerInterface) 
-				Naming.lookup("rmi://127.0.0.1:1098/HelloServerCallbak");
+		ChatServerInterface server = (ChatServerInterface)
+				Naming.lookup("rmi://127.0.0.1:1098/ChatServer");
 
-		HelloClientInterface client = new HelloClient();
+		ChatClientInterface client = new ChatClient();
 		
 		server.registerClient(client);
 		
