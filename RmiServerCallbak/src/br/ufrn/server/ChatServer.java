@@ -4,6 +4,8 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Iterator;
+import java.rmi.ConnectException;
 
 import br.ufrn.rmi.client.model.Message;
 import br.ufrn.rmi.client.ChatClientInterface;
@@ -32,11 +34,16 @@ public class ChatServer extends UnicastRemoteObject implements ChatServerInterfa
 	
 	
 	private void sendMessageToClients( String message ) {
-		
-		for (ChatClientInterface helloClientInterface : clients) {
+
+		Iterator<ChatClientInterface> i = clients.iterator();
+		while (i.hasNext()) {
 			
 			try {
+				ChatClientInterface helloClientInterface = i.next();
 				helloClientInterface.printMessage(new Message(message));
+
+			} catch(ConnectException e){
+				i.remove();
 			} catch (RemoteException e) {
 				e.printStackTrace();
 			}
@@ -66,7 +73,7 @@ public class ChatServer extends UnicastRemoteObject implements ChatServerInterfa
 		// envia mensagem para os clientes
 		sendMessageToClients(message.toString());
 		
-		// TODO: verificar quem enviou a mensagem e não mandar pra esse cliente
+		// TODO: verificar quem enviou a mensagem e nï¿½o mandar pra esse cliente
 		
 	}
 
