@@ -1,4 +1,4 @@
-package br.ufrn.server;
+package br.ufrn.rmi.server;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
@@ -7,9 +7,7 @@ import java.util.List;
 import java.util.Iterator;
 import java.rmi.ConnectException;
 
-import br.ufrn.rmi.client.model.Message;
-import br.ufrn.rmi.client.ChatClientInterface;
-import br.ufrn.rmi.client.ChatServerInterface;
+import br.ufrn.rmi.server.model.Message;
 
 public class ChatServer extends UnicastRemoteObject implements ChatServerInterface {
 
@@ -35,19 +33,34 @@ public class ChatServer extends UnicastRemoteObject implements ChatServerInterfa
 	
 	private void sendMessageToClients( String message ) {
 
-		Iterator<ChatClientInterface> i = clients.iterator();
-		while (i.hasNext()) {
+		for (ChatClientInterface chatClientInterface : clients) {
 			
 			try {
-				ChatClientInterface helloClientInterface = i.next();
-				helloClientInterface.printMessage(new Message(message));
+				chatClientInterface.printMessage(message);
+
+			} catch (RemoteException e) {
+				e.printStackTrace();
+			}
+			
+		}
+	}
+
+	private void checkClients(){
+		Iterator<ChatClientInterface> i = clients.iterator();
+		while (i.hasNext()) {
+
+			try {
+
+				// Testa conenxão
+				ChatClientInterface chatClientInterface = i.next();
+				chatClientInterface.testConection();
 
 			} catch(ConnectException e){
 				i.remove();
 			} catch (RemoteException e) {
 				e.printStackTrace();
 			}
-			
+
 		}
 	}
 	
@@ -68,10 +81,10 @@ public class ChatServer extends UnicastRemoteObject implements ChatServerInterfa
 	
 
 	@Override
-	public void sendMessage(Message message) throws RemoteException {
+	public void sendMessage(String message) throws RemoteException {
 		
 		// envia mensagem para os clientes
-		sendMessageToClients(message.toString());
+		sendMessageToClients(message);
 		
 		// TODO: verificar quem enviou a mensagem e n�o mandar pra esse cliente
 		

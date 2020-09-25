@@ -26,7 +26,12 @@ public class ChatClient extends UnicastRemoteObject implements ChatClientInterfa
 		System.out.println(message);
 		
 	}
-	
+
+	@Override
+	public void testConection() throws RemoteException {
+		//stub
+	}
+
 	// TODO: criar metodo para sendMessage q espera o cliente digitar uma mensagem e envia pro servidor
 	private class Notify extends Thread{
 		
@@ -44,7 +49,7 @@ public class ChatClient extends UnicastRemoteObject implements ChatClientInterfa
 					String msg = scanner.next();
 					
 					
-					server.sendMessage(new Message(msg));
+					server.sendMessage(msg);
 					
 					
 				} catch (RemoteException e) {

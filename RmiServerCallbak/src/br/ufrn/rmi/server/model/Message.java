@@ -8,9 +8,8 @@ public class Message implements Serializable{
 	
 	private String message;
 	private String date;
-    private SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");  
+    private SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 
-	
 	public Message(String message) {
 		this.message = message;
 		this.date = formatter.format(new Date());

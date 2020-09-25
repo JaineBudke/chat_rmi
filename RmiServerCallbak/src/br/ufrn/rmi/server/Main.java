@@ -1,4 +1,4 @@
-package br.ufrn.server;
+package br.ufrn.rmi.server;
 
 import br.ufrn.rmi.client.ChatServerInterface;
 
