@@ -23,10 +23,25 @@ public class ChatServer extends UnicastRemoteObject implements ChatServerInterfa
 	}
 
 	@Override
-	public void registerClient(ChatClientInterface client) throws RemoteException {
+	public void registerClient(ChatClientInterface client, String nome) throws RemoteException {
 			
 		clients.add(client);
-		System.out.println("Novo cliente registrado com sucesso! Total: "+clients.size());
+		sendMessageToClients(nome+ " entrou no chat!");
+		
+	}
+	
+	
+	private void sendMessageToClients( String message ) {
+		
+		for (ChatClientInterface helloClientInterface : clients) {
+			
+			try {
+				helloClientInterface.printMessage(new Message(message));
+			} catch (RemoteException e) {
+				e.printStackTrace();
+			}
+			
+		}
 	}
 	
 	
@@ -36,48 +51,23 @@ public class ChatServer extends UnicastRemoteObject implements ChatServerInterfa
 			
 			for(;;) {
 				
-				if(clients.size() > 0) {
-					
-					//System.out.println("Notificando clientes");
-					
-					int i = 0;
-					
-					// TODO: verificar quem enviou a mensagem e não mandar pra esse cliente
-					// verifica se tem uma nova mensagem 
-					if(newMessage == true) {
-						
-						// envia mensagem para os clientes
-						for (ChatClientInterface helloClientInterface : clients) {
-							
-							try {
-								helloClientInterface.printMessage(new Message(mensagem));
-							} catch (RemoteException e) {
-								e.printStackTrace();
-							}
-							
-						}
-						
-						newMessage = false;
-						
-					}
-					
-					// TODO: retirar o cliente quando ele desconecta (n sei se aq ou no client)
-
-					// TODO: quando cliente entrar imprimir "fulaninho entrou"
-					// TODO: quando cliente desconectar, avisar para todos "fulano saiu"				
-					
-				}
+				// TODO: retirar o cliente quando ele desconecta (n sei se aq ou no client)
+				// TODO: quando cliente desconectar, avisar para todos "fulano saiu"	
 				
 			}
 			
 		}
 	}
-
+	
 
 	@Override
 	public void sendMessage(Message message) throws RemoteException {
-		newMessage = true;
-		mensagem = message.toString();
+		
+		// envia mensagem para os clientes
+		sendMessageToClients(message.toString());
+		
+		// TODO: verificar quem enviou a mensagem e não mandar pra esse cliente
+		
 	}
 
 	

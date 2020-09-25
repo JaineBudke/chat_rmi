@@ -14,7 +14,7 @@ public class Main {
 
 		ChatClientInterface client = new ChatClient();
 		
-		server.registerClient(client);
+		server.registerClient(client, "Jaine");
 		
 	}
 }
