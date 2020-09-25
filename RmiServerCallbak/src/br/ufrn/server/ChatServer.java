@@ -13,6 +13,9 @@ public class ChatServer extends UnicastRemoteObject implements ChatServerInterfa
 
 	private volatile List<ChatClientInterface> clients = new ArrayList<ChatClientInterface>();
 	
+	private boolean newMessage = false;
+	private String mensagem = "";
+	
 	protected ChatServer() throws RemoteException {
 		super();	
 		
@@ -35,31 +38,33 @@ public class ChatServer extends UnicastRemoteObject implements ChatServerInterfa
 				
 				if(clients.size() > 0) {
 					
-					System.out.println("Notificando clientes");
+					//System.out.println("Notificando clientes");
 					
 					int i = 0;
-					// todo: retirar o cliente quando ele desconecta (n sei se aq ou no client)
-					for (ChatClientInterface helloClientInterface : clients) {
+					
+					// TODO: verificar quem enviou a mensagem e não mandar pra esse cliente
+					// verifica se tem uma nova mensagem 
+					if(newMessage == true) {
 						
-						try {
-							helloClientInterface.printMessage(new Message("Hello client " + (i++)));
-						} catch (RemoteException e) {
-							e.printStackTrace();
+						// envia mensagem para os clientes
+						for (ChatClientInterface helloClientInterface : clients) {
+							
+							try {
+								helloClientInterface.printMessage(new Message(mensagem));
+							} catch (RemoteException e) {
+								e.printStackTrace();
+							}
+							
 						}
+						
+						newMessage = false;
+						
 					}
 					
+					// TODO: retirar o cliente quando ele desconecta (n sei se aq ou no client)
+
 					// TODO: quando cliente entrar imprimir "fulaninho entrou"
-					// TODO: quando cliente desconectar, avisar para todos "fulano saiu"
-					
-					// TODO: receber mensagem de cliente e distribuir com o nome dele (menos p quem mandou)
-					
-					
-					try {
-						Thread.sleep(15 * 1000);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-					
+					// TODO: quando cliente desconectar, avisar para todos "fulano saiu"				
 					
 				}
 				
@@ -71,8 +76,8 @@ public class ChatServer extends UnicastRemoteObject implements ChatServerInterfa
 
 	@Override
 	public void sendMessage(Message message) throws RemoteException {
-		System.out.println(message.toString());
-		
+		newMessage = true;
+		mensagem = message.toString();
 	}
 
 	

@@ -8,6 +8,5 @@ import br.ufrn.rmi.client.model.Message;
 public interface ChatClientInterface extends Remote {
 	
 	public void printMessage(Message message) throws RemoteException;
-
 	
 }
