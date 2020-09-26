@@ -1,4 +1,4 @@
-package br.ufrn.rmi.server;
+package br.ufrn.rmi.chat_rmi;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Iterator;
 import java.rmi.ConnectException;
 
-import br.ufrn.rmi.server.model.Message;
+import br.ufrn.rmi.model.Message;
 
 public class ChatServer extends UnicastRemoteObject implements ChatServerInterface {
 
@@ -29,14 +29,13 @@ public class ChatServer extends UnicastRemoteObject implements ChatServerInterfa
 		sendMessageToClients(nome+ " entrou no chat!");
 		
 	}
-	
-	
+
 	private void sendMessageToClients( String message ) {
 
 		for (ChatClientInterface chatClientInterface : clients) {
 			
 			try {
-				chatClientInterface.printMessage(message);
+				chatClientInterface.printMessage( new Message(message));
 
 			} catch (RemoteException e) {
 				e.printStackTrace();
@@ -53,7 +52,7 @@ public class ChatServer extends UnicastRemoteObject implements ChatServerInterfa
 
 				// Testa conenxão
 				ChatClientInterface chatClientInterface = i.next();
-				chatClientInterface.testConection();
+				chatClientInterface.testConnection();
 
 			} catch(ConnectException e){
 				i.remove();
@@ -81,10 +80,10 @@ public class ChatServer extends UnicastRemoteObject implements ChatServerInterfa
 	
 
 	@Override
-	public void sendMessage(String message) throws RemoteException {
+	public void sendMessage(Message message) throws RemoteException {
 		
 		// envia mensagem para os clientes
-		sendMessageToClients(message);
+		sendMessageToClients(message.toString());
 		
 		// TODO: verificar quem enviou a mensagem e n�o mandar pra esse cliente
 		

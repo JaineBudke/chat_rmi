@@ -1,4 +1,4 @@
-package br.ufrn.rmi.client;
+package br.ufrn.rmi.chat_rmi;
 
 import java.net.MalformedURLException;
 import java.rmi.Naming;
@@ -9,7 +9,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Scanner;
 
-import br.ufrn.rmi.client.model.Message;
+import br.ufrn.rmi.model.Message;
 
 
 public class ChatClient extends UnicastRemoteObject implements ChatClientInterface {
@@ -49,7 +49,7 @@ public class ChatClient extends UnicastRemoteObject implements ChatClientInterfa
 					String msg = scanner.next();
 					
 					
-					server.sendMessage(msg);
+					server.sendMessage(new Message(msg));
 					
 					
 				} catch (RemoteException e) {

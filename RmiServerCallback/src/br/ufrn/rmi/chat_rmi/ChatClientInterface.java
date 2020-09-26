@@ -1,9 +1,9 @@
-package br.ufrn.rmi.server;
+package br.ufrn.rmi.chat_rmi;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 
-import br.ufrn.rmi.client.model.Message;
+import br.ufrn.rmi.model.Message;
 
 public interface ChatClientInterface extends Remote {
 	

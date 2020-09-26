@@ -1,6 +1,4 @@
-package br.ufrn.rmi.server;
-
-import br.ufrn.rmi.client.ChatServerInterface;
+package br.ufrn.rmi.chat_rmi;
 
 import java.net.MalformedURLException;
 import java.rmi.Naming;

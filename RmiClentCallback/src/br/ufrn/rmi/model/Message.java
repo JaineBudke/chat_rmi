@@ -1,4 +1,4 @@
-package br.ufrn.rmi.client.model;
+package br.ufrn.rmi.model;
 
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
