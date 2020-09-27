@@ -33,6 +33,7 @@ public class Main {
 		} catch (RemoteException e) {
 			
 			System.out.println("Já existe um usuário com esse nome.");
+			System.exit(0);
 						
 		}
 					

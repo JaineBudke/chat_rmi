@@ -6,4 +6,4 @@ bin/
 
 *.iml
 .idea
-classes
+classes/
