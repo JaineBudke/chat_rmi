@@ -30,6 +30,7 @@ public class ChatServer extends UnicastRemoteObject implements ChatServerInterfa
 		clients.add(client);
 		nomes.add(nome);
 		sendMessageToClients(nome+ " entrou no chat!");
+		System.out.println(nome + " entrou no chat!");
 		
 	}
 

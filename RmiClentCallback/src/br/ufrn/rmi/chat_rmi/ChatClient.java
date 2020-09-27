@@ -33,7 +33,6 @@ public class ChatClient extends UnicastRemoteObject implements ChatClientInterfa
 		System.out.println("teste");
 	}
 
-	// TODO: criar metodo para sendMessage q espera o cliente digitar uma mensagem e envia pro servidor
 	private class Notify extends Thread{
 		
 		public void run() {
@@ -48,19 +47,15 @@ public class ChatClient extends UnicastRemoteObject implements ChatClientInterfa
 					
 					Scanner scanner = new Scanner(System.in);
 					String msg = scanner.next();
-					
-					
+
 					server.sendMessage(new Message(msg));
 					
 					
 				} catch (RemoteException e) {
-					System.out.println("a");
 					System.out.println("N�o foi poss�vel enviar sua mensagem.");
 				} catch (MalformedURLException e) {
-					System.out.println("b");
 					System.out.println("N�o foi poss�vel enviar sua mensagem.");
 				} catch (NotBoundException e) {
-					System.out.println("c");
 					System.out.println("N�o foi poss�vel enviar sua mensagem.");
 				}
 				

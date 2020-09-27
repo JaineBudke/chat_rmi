@@ -28,6 +28,7 @@ public class Message implements Serializable{
 		this.date = formatter.format(date);
 	}
 
+	// Todo: reformatar mensagem "fulano à <data> : <mensagem>"
 	@Override
 	public String toString() {
 		return "Message [message=" + message + ", date=" + date + "]";
