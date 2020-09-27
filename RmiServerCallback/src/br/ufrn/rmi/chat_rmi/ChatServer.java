@@ -6,12 +6,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Iterator;
 import java.rmi.ConnectException;
+import java.rmi.ServerException;
 
 import br.ufrn.rmi.model.Message;
 
 public class ChatServer extends UnicastRemoteObject implements ChatServerInterface {
 
 	private volatile List<ChatClientInterface> clients = new ArrayList<ChatClientInterface>();
+	private volatile List<String> nomes = new ArrayList<String>();
 	
 	private boolean newMessage = false;
 	private String mensagem = "";
@@ -26,17 +28,18 @@ public class ChatServer extends UnicastRemoteObject implements ChatServerInterfa
 	public void registerClient(ChatClientInterface client, String nome) throws RemoteException {
 			
 		clients.add(client);
+		nomes.add(nome);
 		sendMessageToClients(nome+ " entrou no chat!");
 		
 	}
 
 	private void sendMessageToClients( String message ) {
 
-		for (ChatClientInterface chatClientInterface : clients) {
-			
+		Iterator<ChatClientInterface> client = clients.iterator();
+		while ( client.hasNext()){
 			try {
+				ChatClientInterface chatClientInterface = client.next();
 				chatClientInterface.printMessage( new Message(message));
-
 			} catch (RemoteException e) {
 				e.printStackTrace();
 			}
@@ -45,22 +48,30 @@ public class ChatServer extends UnicastRemoteObject implements ChatServerInterfa
 	}
 
 	private void checkClients(){
-		Iterator<ChatClientInterface> i = clients.iterator();
-		while (i.hasNext()) {
+		Iterator<ChatClientInterface> it = clients.iterator();
+		Iterator<String> it2 = nomes.iterator();
+		String name = null;
+		while (it.hasNext()) {
 
 			try {
-
-				// Testa conenxão
-				ChatClientInterface chatClientInterface = i.next();
-				chatClientInterface.testConnection();
-
+				// Testa conexão
+				ChatClientInterface chatClientInterface = it.next();
+				name = it2.next();
+				try {
+					chatClientInterface.testConnection();
+				} catch (ServerException ignored){}
 			} catch(ConnectException e){
-				i.remove();
+				it.remove();
+
+				// avisa que cliente saiu
+				sendMessageToClients( name + " saiu do chat!");
+				System.out.println(name + " saiu do chat!");
+				it2.remove();
 			} catch (RemoteException e) {
 				e.printStackTrace();
 			}
-
 		}
+
 	}
 	
 	
@@ -69,10 +80,13 @@ public class ChatServer extends UnicastRemoteObject implements ChatServerInterfa
 		public void run() {
 			
 			for(;;) {
-				
-				// TODO: retirar o cliente quando ele desconecta (n sei se aq ou no client)
-				// TODO: quando cliente desconectar, avisar para todos "fulano saiu"	
-				
+
+				checkClients();
+				try {
+					Thread.sleep(5 * 1000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
 			}
 			
 		}
