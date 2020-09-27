@@ -15,8 +15,6 @@ public class ChatServer extends UnicastRemoteObject implements ChatServerInterfa
 	private volatile List<ChatClientInterface> clients = new ArrayList<ChatClientInterface>();
 	private volatile List<String> nomes = new ArrayList<String>();
 	
-	private boolean newMessage = false;
-	private String mensagem = "";
 	
 	protected ChatServer() throws RemoteException {
 		super();	
@@ -27,25 +25,52 @@ public class ChatServer extends UnicastRemoteObject implements ChatServerInterfa
 	@Override
 	public void registerClient(ChatClientInterface client, String nome) throws RemoteException {
 			
-		clients.add(client);
-		nomes.add(nome);
-		sendMessageToClients(nome+ " entrou no chat!");
-		System.out.println(nome + " entrou no chat!");
+		// se ainda não tem ninguém com esse nome no chat
+		if( !nomes.contains(nome) ){
+			
+			clients.add(client);
+			nomes.add(nome);
+
+			System.out.println(nome + " entrou no chat!");
+			
+			// avisa ao cliente que ele entrou no chat
+			client.printMessage(new Message("Você entrou no chat!", nome));		
+			
+			// avisa outros clientes que há um novo usuário no chat
+			for( int i = 0; i<clients.size(); i++ ){
+				ChatClientInterface chatClientInterface = clients.get(i);
+				String nameClient = nomes.get(i);
+				
+				if(!nameClient.equals(nome)) {
+					try {
+						chatClientInterface.printMessage( new Message(nome +" entrou no chat!", nome));
+					} catch (RemoteException e) {
+						e.printStackTrace();
+					}
+				} 
+				
+			}
+			
+		} else {
+			throw new RemoteException("Já existe um usuário com esse nome.");
+		}
 		
 	}
 
 	private void sendMessageToClients( String message ) {
-
-		Iterator<ChatClientInterface> client = clients.iterator();
-		while ( client.hasNext()){
+		
+		for( int i = 0; i<clients.size(); i++ ){
+			ChatClientInterface chatClientInterface = clients.get(i);
+			String nomeClient = nomes.get(i);
 			try {
-				ChatClientInterface chatClientInterface = client.next();
-				chatClientInterface.printMessage( new Message(message));
+				chatClientInterface.printMessage( new Message(message, nomeClient));
 			} catch (RemoteException e) {
 				e.printStackTrace();
 			}
 			
+
 		}
+		
 	}
 
 	private void checkClients(){
@@ -97,10 +122,29 @@ public class ChatServer extends UnicastRemoteObject implements ChatServerInterfa
 	@Override
 	public void sendMessage(Message message) throws RemoteException {
 		
-		// envia mensagem para os clientes
-		sendMessageToClients(message.toString());
+		String remetente = message.getName();
 		
-		// TODO: verificar quem enviou a mensagem e n�o mandar pra esse cliente
+		for( int i = 0; i<clients.size(); i++ ){
+			ChatClientInterface chatClientInterface = clients.get(i);
+			String nameClient = nomes.get(i);
+			
+			String[] data_hora = message.getDate().split(" ");
+			
+			// enviar mensagem pros outros clientes
+			if(!nameClient.equals(remetente)) {
+				
+				String mensagem = remetente + " em " +data_hora[0]+ " às " + data_hora[1] +": " + message.getMessage();
+				
+				try {
+					chatClientInterface.printMessage( new Message(mensagem, remetente));
+				} catch (RemoteException e) {
+					e.printStackTrace();
+				}
+
+			}
+			
+
+		}
 		
 	}
 

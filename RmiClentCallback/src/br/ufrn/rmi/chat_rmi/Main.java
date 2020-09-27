@@ -16,14 +16,25 @@ public class Main {
 		ChatServerInterface server = (ChatServerInterface)
 				Naming.lookup("rmi://127.0.0.1:1098/ChatServer");
 
-		ChatClientInterface client = new ChatClient();
 
-		System.out.println("Digite seu nome de usuário: ");
 		BufferedReader reader =
 				new BufferedReader(new InputStreamReader(System.in));
+		
+		
+		System.out.println("Digite seu nome de usuário: ");
 		String nome = reader.readLine();
 		
-		server.registerClient(client, nome);
-		
+		try {
+			
+
+			ChatClientInterface client = new ChatClient(nome);
+			server.registerClient(client, nome);
+			
+		} catch (RemoteException e) {
+			
+			System.out.println("Já existe um usuário com esse nome.");
+						
+		}
+					
 	}
 }

@@ -14,8 +14,11 @@ import br.ufrn.rmi.model.Message;
 
 public class ChatClient extends UnicastRemoteObject implements ChatClientInterface {
 
-	protected ChatClient() throws RemoteException {
+	private String name;
+	
+	protected ChatClient(String name) throws RemoteException {
 		super();
+		this.name = name;
 		// TODO Auto-generated constructor stub
 		new Notify().start();
 	}
@@ -48,7 +51,7 @@ public class ChatClient extends UnicastRemoteObject implements ChatClientInterfa
 					Scanner scanner = new Scanner(System.in);
 					String msg = scanner.next();
 
-					server.sendMessage(new Message(msg));
+					server.sendMessage(new Message(msg, name));
 					
 					
 				} catch (RemoteException e) {
